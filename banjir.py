@@ -112,6 +112,14 @@ def greet_message(message):
                                         \n 👉 /negeri[jarak]/nama_negeri
                                         \n Contoh:
                                         \n 👉/negeri /Perak""", reply_markup=markup)
+@bot.message_handler(commands=["semak"])
+def get_negeri_list(message):
+    mycursor.execute("SELECT Negeri from banjir_info")
+    list_negeri = mycursor.fetchall()
+    no_tuple_list_negeri = [list(data) for data in list_negeri]
+    flat_list = [y for data in no_tuple_list_negeri for y in data]
+    flat_set = set(flat_list)
+    bot.reply_to(message, "Berikut senarai data nama negeri yang terdapat dalam database; {}".format(flat_set))
 
 @bot.message_handler(commands=["mangsa"])
 def get_info(message):
