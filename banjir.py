@@ -85,7 +85,7 @@ def set_loc(message):
     bot.send_message(message.chat.id, """Masukkan info dengan format berikut; 
                                         \n 👉 /barang [jarak]/nama_Barang/ kuantiti/ keterangan_lain
                                         \n 👉 Contoh: /barang /Powerbank/ 5 / Bateri habis""")
-@bot.message_handler(commands=["kit"])
+@bot.message_handler(commands=["barang"])
 def get_loc(message):
     user_text = message.text.split('/')
     barang = user_text[2]
@@ -95,7 +95,7 @@ def get_loc(message):
     val = [barang, kuantiti, catatan]
     mycursor.execute("INSERT INTO barang_info (Barang, Kuantiti, Catatan) VALUES (%s, %s, %s)", val)
     mydb.commit()
-    bot.reply_to(message, 'data anda telah disimpan')      
+    bot.reply_to(message, 'Maklumat berjaya disimpan. Penyelamat akan cuba sedaya upaya memenuhi keperluan anda. 🙏')      
 
 ################################################################################################################
 
