@@ -1,5 +1,6 @@
 import os
 import telebot
+from telebot import types
 import mysql.connector 
 import requests
 import json
