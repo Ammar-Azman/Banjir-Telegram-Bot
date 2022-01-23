@@ -56,15 +56,21 @@ def set_loc(message):
 def get_loc(message):
     try:
         
+        user = message.from_user
+
+        nama_mangsa = user.first_name
+        user_chat_id = message.chat.id
+
         user_text = message.text.replace(" ", "")
         user_text = user_text.split('/')
-        nama_mangsa = user_text[2].title()
-        loc = user_text[3].title()
-        neg = user_text[4].title()
-        coo = user_text[5]
-        bilmang = user_text[6]
-        val = [loc,neg,coo,bilmang]
-        mycursor.execute("INSERT INTO banjir_info (Lokasi, Negeri, Koordinat, Bil_mangsa) VALUES (%s, %s, %s, %s)", val)
+
+        loc = user_text[2].title()
+        neg = user_text[3].title()
+        coo = user_text[4]
+        bilmang = user_text[5]
+
+        val = [nama_mangsa, user_chat_id, loc,neg, coo, bilmang]
+        mycursor.execute("INSERT INTO banjir_info (Nama_mangsa, tele_chat_id, Lokasi, Negeri, Koordinat, Bil_mangsa) VALUES (%s, %s, %s, %s, %s, %s)", val)
 
         mydb.commit()
         bot.reply_to(message, 'Maklumat anda telah disimpan. \nHarap bersabar menunggu penyelamat datang. \nTerus kuat dan berdoa 🤲')
