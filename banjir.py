@@ -170,6 +170,11 @@ def get_info(message):
     except Exception as e1:
         bot.send_message(message.chat.id, "⚠ Format Salah: Sila ikut format 👉\n\n/negeri[jarak]/nama_Negeri")
 
+#------------- handle wrong input ----------------------
+@bot.message_handler(func=lambda message:True)
+def echo_all(message):
+    bot.reply_to(message, "⚠ Input Salah: Sila masukkan input mengikut format yang ditetapkan.")
+
 
 print('bot start running')
 bot.infinity_polling()
