@@ -121,41 +121,55 @@ def get_negeri_list(message):
     flat_set = set(flat_list)
     bot.reply_to(message, "Berikut senarai data nama negeri yang terdapat dalam database; {}".format(flat_set))
 
-@bot.message_handler(commands=["mangsa"])
+@bot.message_handler(commands=["negeri"])
 def get_info(message):
-    user_text = message.text.split(" ")
+    try:
+        user_text = message.text.replace(" ", "")
+        user_text = user_text.split("/")
 
-    negeri = user_text[1]
-    
-    bot.send_message(message.chat.id, "Carian sedang dilakukan...")
-    #time.sleep(1)
-    mycursor.execute("SELECT Lokasi, Koordinat, Bil_mangsa FROM banjir_info WHERE Negeri = '{}'".format(negeri))
-    hasil_carian = mycursor.fetchall()
+        negeri = user_text[2]
+        bot.send_message(message.chat.id, "Carian sedang dilakukan...")
+        #time.sleep(1)
+        mycursor.execute("SELECT Negeri from banjir_info")
+        list_negeri = mycursor.fetchall()
 
-    # location in url format
-    url_location = []
-    url_info_list = [x[1] for x in hasil_carian]
-    for coo in url_info_list:
-        coo_split = coo.split(",")
-        coo_1 = coo_split[0]
-        coo_2 = coo_split[1]
-        url_print = "https://www.google.com/maps/search/?api=1&query={0}%2C{1}".format(coo_1, coo_2)
-        url_print = url_print.replace(" ", "")
-        url_location.append(url_print)
+        no_tuple_list_negeri = [list(data) for data in list_negeri]
+        flat_list = [y for data in no_tuple_list_negeri for y in data]
 
-    # balas informasi mangsa  kepada Penyelamat
-    balas = ""
-    for full_info, url_v in zip(hasil_carian, url_location):
-        balas = balas + "🆘" + str(full_info) + "\n" + url_v + "\n\n"
-    
-    # delete simbol tak perlu
-    balas = balas.replace("'", "")
-    balas = balas.replace(",", " -- ")
-    balas = balas.replace("(", "")
-    balas = balas.replace(")", "")
+        # check wether the Negeri is exist in the Database
+        if negeri not in flat_list:
+            bot.reply_to(message, 'Tiada maklumat mangsa dalam negeri dinyatakan. Sila cuba nama negeri lain.')
 
-    bot.reply_to(message, balas)
-    
+        elif negeri in flat_list:
+            mycursor.execute("SELECT Lokasi, Koordinat, Bil_mangsa FROM banjir_info WHERE Negeri = '{}'".format(negeri))
+            hasil_carian = mycursor.fetchall()
+            # location in url format
+            url_location = []
+            url_info_list = [x[1] for x in hasil_carian]
+            for coo in url_info_list:
+                coo_split = coo.split(",")
+                coo_1 = coo_split[0]
+                coo_2 = coo_split[1]
+                url_print = "https://www.google.com/maps/search/?api=1&query={0}%2C{1}".format(coo_1, coo_2)
+                url_print = url_print.replace(" ", "")
+                url_location.append(url_print)
+
+            # balas informasi mangsa  kepada Penyelamat
+            balas = ""
+            for full_info, url_v in zip(hasil_carian, url_location):
+                balas = balas + "🆘" + str(full_info) + "\n" + url_v + "\n\n"
+            
+            # delete simbol tak perlu
+            balas = balas.replace("'", "")
+            balas = balas.replace(",", " -- ")
+            balas = balas.replace("(", "")
+            balas = balas.replace(")", "")
+
+            bot.reply_to(message, balas)
+
+    except Exception as e1:
+        bot.send_message(message.chat.id, "⚠ Format Salah: Sila ikut format 👉\n\n/negeri[jarak]/nama_Negeri")
+
 
 print('bot start running')
 bot.infinity_polling()
