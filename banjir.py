@@ -147,7 +147,7 @@ def get_info(message):
             bot.reply_to(message, 'Tiada maklumat mangsa dalam negeri dinyatakan. Sila cuba nama negeri lain.')
 
         elif negeri in flat_list:
-            mycursor.execute("SELECT Lokasi, Koordinat, Bil_mangsa FROM banjir_info WHERE Negeri = '{}'".format(negeri))
+            mycursor.execute("SELECT Lokasi, Koordinat, Bil_mangsa, Status FROM banjir_info WHERE Negeri = '{}'".format(negeri))
             hasil_carian = mycursor.fetchall()
             # location in url format
             url_location = []
