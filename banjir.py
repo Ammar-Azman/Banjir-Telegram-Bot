@@ -40,7 +40,7 @@ def salam(message):
                 \nJika penyelamat, tekan ini 👉 /Penyelamat🔰
                  
                  """.format(user.first_name), reply_markup=markup)
-                 
+
 # command, /Mangsa -- untuk mangsa banjir
 @bot.message_handler(commands=["Mangsa🆘"])
 def set_loc(message):
@@ -50,18 +50,34 @@ def set_loc(message):
                                         \n Contoh: 
                                         \n👉\n/tolong /Ipoh/ Perak/ 4.633028068476687, 101.08841026711355/ 5 orang""")
 
-@bot.message_handler(commands=["help"])
-def get_loc(message):
-    user_text = message.text.split('/')
-    loc = user_text[2]
-    neg = user_text[3]
-    coo = user_text[4]
-    bilmang = user_text[5]
-    val = [loc,neg,coo,bilmang]
-    mycursor.execute("INSERT INTO banjir_info (Lokasi, Negeri, Koordinat, Bil_mangsa) VALUES (%s, %s, %s, %s)", val)
+#### ----------------- input dari mangsa tempat kejadian---------------------
 
-    mydb.commit()
-    bot.reply_to(message, 'data anda telah disimpan')
+@bot.message_handler(commands=["tolong"])
+def get_loc(message):
+    try:
+        
+        user_text = message.text.replace(" ", "")
+        user_text = user_text.split('/')
+        nama_mangsa = user_text[2].title()
+        loc = user_text[3].title()
+        neg = user_text[4].title()
+        coo = user_text[5]
+        bilmang = user_text[6]
+        val = [loc,neg,coo,bilmang]
+        mycursor.execute("INSERT INTO banjir_info (Lokasi, Negeri, Koordinat, Bil_mangsa) VALUES (%s, %s, %s, %s)", val)
+
+        mydb.commit()
+        bot.reply_to(message, 'Maklumat anda telah disimpan. \nHarap bersabar menunggu penyelamat datang. \nTerus kuat dan berdoa 🤲')
+
+        time.sleep(3)
+        markup = types.ReplyKeyboardMarkup(row_width=2)
+        button_1 = types.KeyboardButton('/hidup')
+        markup.row(button_1)
+        
+        bot.send_message(message.chat.id, "Jika anda memerlukan barang/makanan/powerbank/kit kecemasan, \ntekan ini ---> /hidup", reply_markup=markup)
+
+    except Exception as e0:
+        bot.send_message(message.chat.id, "⚠ Format Salah: Sila ikut format 👉\n\n/tolong[jarak]/Lokasi/ Negeri / Koordinat/ Bilangan mangsa")         
 
 #---request barang keperluan
 @bot.message_handler(commands=["hidup"])
