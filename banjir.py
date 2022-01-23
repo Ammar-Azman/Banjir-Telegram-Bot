@@ -99,14 +99,19 @@ def get_loc(message):
 
 ################################################################################################################
 
-#---------------------- UNTUK PENYELAMAT 
+#---------------------- command, /Penyelamat 
 
-@bot.message_handler(commands=["penyelamat"])
+@bot.message_handler(commands=["Penyelamat🔰"])
 def greet_message(message):
-    bot.send_message(message.chat.id, """Jika anda seorang penyelamat, ikut format seperti berikut untuk mengetahui lokasi mangsa banjir
-                                        \n /mangsa/negeri
+    markup = types.ReplyKeyboardMarkup(row_width=2)
+    button_1 = types.KeyboardButton('/semak')
+    markup.row(button_1)
+    bot.send_message(message.chat.id, """Jika anda seorang penyelamat, ikut format berikut:
+                                        \n1- Untuk mengetahui senarai negeri dalam database---> /semak 
+                                        \n2- Untuk mengesan lokasi mangsa banjir
+                                        \n 👉 /negeri[jarak]/nama_negeri
                                         \n Contoh:
-                                        \n /mangsa/Perak""" )
+                                        \n 👉/negeri /Perak""", reply_markup=markup)
 
 @bot.message_handler(commands=["mangsa"])
 def get_info(message):
