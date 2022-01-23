@@ -83,10 +83,8 @@ def get_loc(message):
 @bot.message_handler(commands=["hidup"])
 def set_loc(message):
     bot.send_message(message.chat.id, """Masukkan info dengan format berikut; 
-                                        \n /kit /Barang/ Kuantiti/ Keterangan lain
-
-                                        \n Contoh: /kit/Powerbank/5/ Bateri habis""")
-
+                                        \n 👉 /barang [jarak]/nama_Barang/ kuantiti/ keterangan_lain
+                                        \n 👉 Contoh: /barang /Powerbank/ 5 / Bateri habis""")
 @bot.message_handler(commands=["kit"])
 def get_loc(message):
     user_text = message.text.split('/')
