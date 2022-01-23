@@ -75,13 +75,13 @@ def get_loc(message):
         mydb.commit()
         bot.reply_to(message, 'Maklumat anda telah disimpan. \nHarap bersabar menunggu penyelamat datang. \nTerus kuat dan berdoa 🤲')
 
-        time.sleep(3)
         markup = types.ReplyKeyboardMarkup(row_width=2)
         button_1 = types.KeyboardButton('/hidup')
-        markup.row(button_1)
+        button_selamat = types.KeyboardButton("/SELAMAT✅")
+        markup.row(button_1, button_selamat)
         
-        bot.send_message(message.chat.id, "Jika anda memerlukan barang/makanan/powerbank/kit kecemasan, \ntekan ini ---> /hidup", reply_markup=markup)
-
+        bot.send_message(message.chat.id, """Jika anda memerlukan barang/makanan/powerbank/kit kecemasan, \ntekan ---> /hidup
+                                            \nJika anda TELAH DISELAMATKAN tekan ---> /SELAMAT✅""", reply_markup=markup)
     except Exception as e0:
         bot.send_message(message.chat.id, "⚠ Format Salah: Sila ikut format 👉\n\n/tolong[jarak]/Lokasi/ Negeri / Koordinat/ Bilangan mangsa")         
 
