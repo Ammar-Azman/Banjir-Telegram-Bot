@@ -176,6 +176,20 @@ def get_info(message):
     except Exception as e1:
         bot.send_message(message.chat.id, "⚠ Format Salah: Sila ikut format 👉\n\n/negeri[jarak]/nama_Negeri")
 
+#--------handle  command, /SELAMAT✅ - /Mangsa perlu tekan /SELAMAT✅ apabila telah diselamatkan -- 
+# DB akan update "TELAH SELAMAT" -- pada Status
+
+@bot.message_handler(commands=["SELAMAT✅"])
+def update_status_mangsa(message):
+    user_chat_id = message.chat.id
+    
+
+    mycursor.execute("UPDATE banjir_info SET Status = 'TELAH SELAMAT✅' WHERE tele_chat_id = {}".format(user_chat_id))
+    mydb.commit()
+
+    time.sleep(2)
+    bot.reply_to(message, "Terima kasih kerana telah mengemaskini status terkini anda.👍")
+
 #------------- handle wrong input ----------------------
 @bot.message_handler(func=lambda message:True)
 def echo_all(message):
