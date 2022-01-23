@@ -40,14 +40,15 @@ def salam(message):
                 \nJika penyelamat, tekan ini 👉 /Penyelamat🔰
                  
                  """.format(user.first_name), reply_markup=markup)
-# --- kecemasan minta tolong -- 
-@bot.message_handler(commands=["sos"])
+                 
+# command, /Mangsa -- untuk mangsa banjir
+@bot.message_handler(commands=["Mangsa🆘"])
 def set_loc(message):
+      
     bot.send_message(message.chat.id, """Masukkan info dengan format berikut; 
-                                        \n /help /Lokasi/ Negeri/ Koordinat/ Bilangan mangsa
-
-                                        \n Contoh: /help /Ipoh/Perak/ 4.5975° N, 101.0901° E/ 5 orang""")
-    bot.send_message(message.chat.id, "Jika anda memerlukan barang/makanan/powerbank/kit kecemasan, \ntekan ini ---> /hidup")
+                                        \n /tolong[jarak]/Lokasi/ Negeri / Koordinat/ Bilangan mangsa
+                                        \n Contoh: 
+                                        \n👉\n/tolong /Ipoh/ Perak/ 4.633028068476687, 101.08841026711355/ 5 orang""")
 
 @bot.message_handler(commands=["help"])
 def get_loc(message):
