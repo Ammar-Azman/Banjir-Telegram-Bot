@@ -18,18 +18,28 @@ mydb = mysql.connector.connect(
 )
 mycursor = mydb.cursor()
 
-#----UNTUK MANGSA---
-#---- TELEGRAM --- 
-@bot.message_handler(commands=['mula'])
+#<---------------------TELEGRAM: MANGSA------------------------------------> 
+# handle command, /start
+@bot.message_handler(commands=['start', 'mula'])
 def salam(message):
-    bot.reply_to(message,
-                 """🚨🚨🚨
-                 \nJika anda terperangkap, tarik nafas dan bertenang. 
-                \n Adakah anda seorang mangsa atau penyelamat?
-                Jika mangsa, tekan ini ---> /sos
-                Jika penyelamat, tekan ini --> /penyelamat
+    user = message.from_user
+
+    #button
+    markup = types.ReplyKeyboardMarkup(row_width=0.5)
+    button_1 = types.KeyboardButton('/Mangsa🆘') 
+    button_2 = types.KeyboardButton('/Penyelamat🔰') 
+    markup.row(button_1,button_2)
+    
+
+    bot.send_message(message.chat.id,
+                 """🚨
+                \nKepada {}.
+                \nJika anda terperangkap, tarik nafas dan bertenang. 
+                \nAdakah anda seorang mangsa atau penyelamat?
+                \nJika mangsa, tekan ini 👉 /Mangsa 🆘
+                \nJika penyelamat, tekan ini 👉 /Penyelamat🔰
                  
-                 """)
+                 """.format(user.first_name), reply_markup=markup)
 # --- kecemasan minta tolong -- 
 @bot.message_handler(commands=["sos"])
 def set_loc(message):
