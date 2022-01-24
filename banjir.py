@@ -133,9 +133,10 @@ def greet_message(message):
     markup = types.ReplyKeyboardMarkup(row_width=2)
     button_1 = types.KeyboardButton('/semak')
     markup.row(button_1)
-    bot.send_message(message.chat.id, """Jika anda seorang penyelamat, ikut format berikut:
-                                        \n1- Untuk mengetahui senarai negeri dalam database---> /semak 
-                                        \n2- Untuk mengesan lokasi mangsa banjir
+    bot.send_message(message.chat.id, """Jika anda seorang Penyelamat🔰, ikut langkah berikut:
+                                        \n1️⃣ Untuk mengetahui senarai negeri mangsa banjir, \ntekan butang ➡ [/semak]
+                                        \n2️⃣ Untuk mengetahui barang keperluan mangsa banjir, \ntekan butang ➡  [/keperluan]
+                                        \n3️⃣ Untuk mengesan lokasi mangsa banjir
                                         \n 👉 /negeri[jarak]/nama_negeri
                                         \n Contoh:
                                         \n 👉/negeri /Perak""", reply_markup=markup)
