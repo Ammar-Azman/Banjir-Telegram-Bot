@@ -104,7 +104,6 @@ def update_status_mangsa(message):
     
     mycursor.execute("UPDATE banjir_info SET Status = 'TELAH SELAMAT✅' WHERE tele_chat_id = {}".format(user_chat_id))
     mydb.commit()
-    print("succeed")
 
     time.sleep(2)
     bot.reply_to(message, "Kemaskini status berjaya.👍")         
@@ -198,10 +197,6 @@ def get_info(message):
 
     except Exception as e1:
         bot.send_message(message.chat.id, "⚠ Format Salah: Sila ikut format 👉\n\n/negeri[jarak]/nama_Negeri")
-
-#--------handle  command, /SELAMAT✅ - /Mangsa perlu tekan /SELAMAT✅ apabila telah diselamatkan -- 
-# DB akan update "TELAH SELAMAT" -- pada Status
-
 
 #------------- handle wrong input ----------------------
 @bot.message_handler(func=lambda message:True)
