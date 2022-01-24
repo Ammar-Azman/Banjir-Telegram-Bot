@@ -159,13 +159,10 @@ def get_negeri_list(message):
 def get_barang_from_db(message):
     mycursor.execute("SELECT Barang from barang_info")
     list_barang = mycursor.fetchall()
-    no_tuple_list_barang = [list(data) for data in list_barang]
-    flat_list = [y for data in no_tuple_list_barang for y in data]
-    flat_set = set(flat_list)
-    
+    convert_to_set_avoid_duplicate = set(list_barang)
 
     emp_set = ""
-    for k in list_barang:
+    for k in convert_to_set_avoid_duplicate:
         emp_set = emp_set + str(k) + "\n"
 
     emp_set = emp_set.replace("'", "")
@@ -174,8 +171,7 @@ def get_barang_from_db(message):
     emp_set = emp_set.replace("(", "▶ ")
     emp_set = emp_set.replace(")", "")
 
-    bot.reply_to(message, "Berikut adalah senarai barang keperluan mangsa: \n\n{}".format(emp_set))
-
+    bot.reply_to(message, "Penyelamat🔰 \nKala ini, berikut adalah senarai barang keperluan mangsa: \n\n{}".format(emp_set))
 @bot.message_handler(commands=["negeri"])
 def get_info(message):
     try:
