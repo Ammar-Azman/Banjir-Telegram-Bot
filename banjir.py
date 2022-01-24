@@ -93,8 +93,21 @@ def get_loc(message):
     except Exception as e0:
         bot.send_message(message.chat.id, "⚠ Format Salah: Sila ikut format 👉\n\n/tolong[jarak]/Lokasi/ Negeri / Koordinat/ Bilangan mangsa")           
 
- #--------ingatkan mangsa setiap 30 min untuk update situasi----------
- # ------- jika belum, abaikan mesej ----------------
+@bot.message_handler(commands=["selamat"])
+def remind_victim(message):
+    user = message.from_user          
+    msg = bot.reply_to(message, "Keadaan terkini {} telah dikemaskini...".format(user.first_name))
+    bot.register_next_step_handler(msg, update_status_mangsa(message))
+
+def update_status_mangsa(message):
+    user_chat_id = message.chat.id
+    
+    mycursor.execute("UPDATE banjir_info SET Status = 'TELAH SELAMAT✅' WHERE tele_chat_id = {}".format(user_chat_id))
+    mydb.commit()
+    print("succeed")
+
+    time.sleep(2)
+    bot.reply_to(message, "Kemaskini status berjaya.👍")         
 #---request barang keperluan
 @bot.message_handler(commands=["hidup"])
 def set_loc(message):
@@ -189,16 +202,6 @@ def get_info(message):
 #--------handle  command, /SELAMAT✅ - /Mangsa perlu tekan /SELAMAT✅ apabila telah diselamatkan -- 
 # DB akan update "TELAH SELAMAT" -- pada Status
 
-@bot.message_handler(commands=["SELAMAT✅"])
-def update_status_mangsa(message):
-    user_chat_id = message.chat.id
-    
-
-    mycursor.execute("UPDATE banjir_info SET Status = 'TELAH SELAMAT✅' WHERE tele_chat_id = {}".format(user_chat_id))
-    mydb.commit()
-
-    time.sleep(2)
-    bot.reply_to(message, "Terima kasih kerana telah mengemaskini status terkini anda.👍")
 
 #------------- handle wrong input ----------------------
 @bot.message_handler(func=lambda message:True)
