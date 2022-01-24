@@ -143,11 +143,17 @@ def greet_message(message):
 def get_negeri_list(message):
     mycursor.execute("SELECT Negeri from banjir_info")
     list_negeri = mycursor.fetchall()
-    no_tuple_list_negeri = [list(data) for data in list_negeri]
-    flat_list = [y for data in no_tuple_list_negeri for y in data]
-    flat_set = set(flat_list)
-    bot.reply_to(message, "Berikut senarai data nama negeri yang terdapat dalam database; {}".format(flat_set))
+    convert_to_set_avoid_duplicate = set(list_negeri)
+    emp_set = ""
+    for k in convert_to_set_avoid_duplicate:
+        emp_set = emp_set + str(k) + "\n"
 
+    emp_set = emp_set.replace("'", "")
+    emp_set = emp_set.replace(" ", "")
+    emp_set = emp_set.replace(",", "")
+    emp_set = emp_set.replace("(", "▶ ")
+    emp_set = emp_set.replace(")", "")
+    bot.reply_to(message, "Berikut senarai data nama negeri yang terdapat dalam database; {}".format((emp_set)))
 ### semak barang keperluan mangsa 
 @bot.message_handler(commands=["keperluan"])
 def get_barang_from_db(message):
