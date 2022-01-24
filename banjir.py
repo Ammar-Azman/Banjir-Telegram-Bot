@@ -2,8 +2,6 @@ import os
 import telebot
 from telebot import types
 import mysql.connector 
-import requests
-import json
 import time 
 
 API_TOKEN = "5043764359:AAE8z5Vvl9qgzZPd8pbci4IXchAnpNqDTtc"
