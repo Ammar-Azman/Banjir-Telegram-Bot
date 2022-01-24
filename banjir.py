@@ -45,7 +45,7 @@ def salam(message):
 def set_loc(message):
     user = message.from_user
       
-    bot.send_message(message.chat.id, """Masukkan informasi {} dengan format berikut; 
+    bot.send_message(message.chat.id, """Masukkan malumat {} dengan format berikut; 
                                         \n /tolong[jarak]/Lokasi/ Negeri / Koordinat/ Bilangan mangsa 
                                         \n🌟Pastikan anda meletakkan [jarak] dan "/" seperti format diatas.
                                         \n Contoh👇\n/tolong /Ipoh/Perak/4.633028068476687, 101.08841026711355/5 orang""".format(user.first_name))
