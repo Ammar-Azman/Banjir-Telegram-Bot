@@ -148,6 +148,28 @@ def get_negeri_list(message):
     flat_set = set(flat_list)
     bot.reply_to(message, "Berikut senarai data nama negeri yang terdapat dalam database; {}".format(flat_set))
 
+### semak barang keperluan mangsa 
+@bot.message_handler(commands=["keperluan"])
+def get_barang_from_db(message):
+    mycursor.execute("SELECT Barang from barang_info")
+    list_barang = mycursor.fetchall()
+    no_tuple_list_barang = [list(data) for data in list_barang]
+    flat_list = [y for data in no_tuple_list_barang for y in data]
+    flat_set = set(flat_list)
+    
+
+    emp_set = ""
+    for k in list_barang:
+        emp_set = emp_set + str(k) + "\n"
+
+    emp_set = emp_set.replace("'", "")
+    emp_set = emp_set.replace(" ", "")
+    emp_set = emp_set.replace(",", "")
+    emp_set = emp_set.replace("(", "▶ ")
+    emp_set = emp_set.replace(")", "")
+
+    bot.reply_to(message, "Berikut adalah senarai barang keperluan mangsa: \n\n{}".format(emp_set))
+
 @bot.message_handler(commands=["negeri"])
 def get_info(message):
     try:
