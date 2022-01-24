@@ -27,7 +27,7 @@ def salam(message):
     button_1 = types.KeyboardButton('/Mangsa🆘') 
     button_2 = types.KeyboardButton('/Penyelamat🔰') 
     markup.row(button_1,button_2)
-    
+
     bot.reply_to(message, "BOT BANJIR TLEAH DIAKTIFKAN 🚩")
     time.sleep(2)
     bot.send_message(message.chat.id,
@@ -43,12 +43,12 @@ def salam(message):
 # command, /Mangsa -- untuk mangsa banjir
 @bot.message_handler(commands=["Mangsa🆘"])
 def set_loc(message):
+    user = message.from_user
       
-    bot.send_message(message.chat.id, """Masukkan info dengan format berikut; 
-                                        \n /tolong[jarak]/Lokasi/ Negeri / Koordinat/ Bilangan mangsa
-                                        \n Contoh: 
-                                        \n👉\n/tolong /Ipoh/ Perak/ 4.633028068476687, 101.08841026711355/ 5 orang""")
-
+    bot.send_message(message.chat.id, """Masukkan informasi {} dengan format berikut; 
+                                        \n /tolong[jarak]/Lokasi/ Negeri / Koordinat/ Bilangan mangsa 
+                                        \n🌟Pastikan anda meletakkan [jarak] dan "/" seperti format diatas.
+                                        \n Contoh👇\n/tolong /Ipoh/Perak/4.633028068476687, 101.08841026711355/5 orang""".format(user.first_name))
 #### ----------------- input dari mangsa tempat kejadian---------------------
 
 @bot.message_handler(commands=["tolong"])
