@@ -55,7 +55,7 @@ def set_loc(message):
 @bot.message_handler(commands=["tolong"])
 def get_loc(message):
     try:
-        
+
         user = message.from_user
 
         nama_mangsa = user.first_name
@@ -75,16 +75,26 @@ def get_loc(message):
         mydb.commit()
         bot.reply_to(message, 'Maklumat anda telah disimpan. \nHarap bersabar menunggu penyelamat datang. \nTerus kuat dan berdoa 🤲')
 
+        time.sleep(3)
         markup = types.ReplyKeyboardMarkup(row_width=2)
         button_1 = types.KeyboardButton('/hidup')
-        button_selamat = types.KeyboardButton("/SELAMAT✅")
+        button_selamat = types.KeyboardButton("/selamat")
         markup.row(button_1, button_selamat)
         
-        bot.send_message(message.chat.id, """Jika anda memerlukan barang/makanan/powerbank/kit kecemasan, \ntekan ---> /hidup
-                                            \nJika anda TELAH DISELAMATKAN tekan ---> /SELAMAT✅""", reply_markup=markup)
-    except Exception as e0:
-        bot.send_message(message.chat.id, "⚠ Format Salah: Sila ikut format 👉\n\n/tolong[jarak]/Lokasi/ Negeri / Koordinat/ Bilangan mangsa")         
+        bot.send_message(message.chat.id, """Jika anda memerlukan barang/makanan/powerbank/kit kecemasan, \ntekan ---> [/hidup]
+                                            \nJika anda TELAH DISELAMATKAN tekan ---> [/selamat]""", reply_markup=markup)
+        #reminder 
+        for i in range(3):
+            bot.reply_to(message, """PERINGATAN kepada Ammar, jika anda telah diselamatkan, sila tekan butang [/selamat]. 
+                                    \nJika belum, sila abaikan mesej ini.""".format(user.first_name))
 
+            time.sleep(60*60) # remind again after 1 hrs
+        
+    except Exception as e0:
+        bot.send_message(message.chat.id, "⚠ Format Salah: Sila ikut format 👉\n\n/tolong[jarak]/Lokasi/ Negeri / Koordinat/ Bilangan mangsa")           
+
+ #--------ingatkan mangsa setiap 30 min untuk update situasi----------
+ # ------- jika belum, abaikan mesej ----------------
 #---request barang keperluan
 @bot.message_handler(commands=["hidup"])
 def set_loc(message):
