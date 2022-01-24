@@ -28,14 +28,15 @@ def salam(message):
     button_2 = types.KeyboardButton('/Penyelamat🔰') 
     markup.row(button_1,button_2)
     
-
+    bot.reply_to(message, "BOT BANJIR TLEAH DIAKTIFKAN 🚩")
+    time.sleep(2)
     bot.send_message(message.chat.id,
                  """🚨
-                \nKepada {}.
-                \nJika anda terperangkap, tarik nafas dan bertenang. 
+                \nKepada {}, jika anda terperangkap, tarik nafas dan bertenang. 
+                \nIkuti langkah dibawah sebaik mungkin.
                 \nAdakah anda seorang mangsa atau penyelamat?
-                \nJika mangsa, tekan ini 👉 /Mangsa 🆘
-                \nJika penyelamat, tekan ini 👉 /Penyelamat🔰
+                \nJika mangsa, tekan ini 👉 [/Mangsa 🆘] \nJika penyelamat, tekan ini 👉 [/Penyelamat🔰]
+                \nSila pilih dengan menekan butang dibawah 👇
                  
                  """.format(user.first_name), reply_markup=markup)
 
