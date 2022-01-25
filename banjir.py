@@ -51,46 +51,6 @@ def set_loc(message):
                                         \n Contoh👇\n/tolong /Ipoh/Perak/4.633028068476687, 101.08841026711355/5 orang""".format(user.first_name))
 #### ----------------- input dari mangsa tempat kejadian---------------------
 
-@bot.message_handler(commands=["tolong"])
-def get_loc(message):
-    try:
-
-        user = message.from_user
-
-        nama_mangsa = user.first_name
-        user_chat_id = message.chat.id
-
-        user_text = message.text.replace(" ", "")
-        user_text = user_text.split('/')
-
-        loc = user_text[2].title()
-        neg = user_text[3].title()
-        coo = user_text[4]
-        bilmang = user_text[5]
-
-        val = [nama_mangsa, user_chat_id, loc,neg, coo, bilmang]
-        mycursor.execute("INSERT INTO banjir_info (Nama_mangsa, tele_chat_id, Lokasi, Negeri, Koordinat, Bil_mangsa) VALUES (%s, %s, %s, %s, %s, %s)", val)
-
-        mydb.commit()
-        bot.reply_to(message, 'Maklumat anda telah disimpan. \nHarap bersabar menunggu penyelamat datang. \nTerus kuat dan berdoa 🤲')
-
-        time.sleep(3)
-        markup = types.ReplyKeyboardMarkup(row_width=2)
-        button_1 = types.KeyboardButton('/hidup')
-        button_selamat = types.KeyboardButton("/selamat")
-        markup.row(button_1, button_selamat)
-        
-        bot.send_message(message.chat.id, """Jika anda memerlukan barang/makanan/powerbank/kit kecemasan, \ntekan ---> [/hidup]
-                                            \nJika anda TELAH DISELAMATKAN tekan ---> [/selamat]""", reply_markup=markup)
-        #reminder 
-        for i in range(3):
-            bot.reply_to(message, """PERINGATAN kepada Ammar, jika anda telah diselamatkan, sila tekan butang [/selamat]. 
-                                    \nJika belum, sila abaikan mesej ini.""".format(user.first_name))
-
-            time.sleep(60*60) # remind again after 1 hrs
-        
-    except Exception as e0:
-        bot.send_message(message.chat.id, "⚠ Format Salah: Sila ikut format 👉\n\n/tolong[jarak]/Lokasi/ Negeri / Koordinat/ Bilangan mangsa")           
 
 @bot.message_handler(commands=["selamat"])
 def remind_victim(message):
