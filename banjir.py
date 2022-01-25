@@ -155,21 +155,11 @@ def get_info(message):
         elif negeri in flat_list:
             mycursor.execute("SELECT Lokasi, Koordinat, Bil_mangsa, Status FROM banjir_info WHERE Negeri = '{}'".format(negeri))
             hasil_carian = mycursor.fetchall()
-            # location in url format
-            url_location = []
-            url_info_list = [x[1] for x in hasil_carian]
-            for coo in url_info_list:
-                coo_split = coo.split(",")
-                coo_1 = coo_split[0]
-                coo_2 = coo_split[1]
-                url_print = "https://www.google.com/maps/search/?api=1&query={0}%2C{1}".format(coo_1, coo_2)
-                url_print = url_print.replace(" ", "")
-                url_location.append(url_print)
 
             # balas informasi mangsa  kepada Penyelamat
             balas = ""
-            for full_info, url_v in zip(hasil_carian, url_location):
-                balas = balas + "🆘" + str(full_info) + "\n" + url_v + "\n\n"
+            for full_info in hasil_carian:
+                balas = balas + "🆘" + str(full_info) + "\n\n"
             
             # delete simbol tak perlu
             balas = balas.replace("'", "")
