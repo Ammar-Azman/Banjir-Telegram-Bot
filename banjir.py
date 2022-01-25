@@ -226,20 +226,24 @@ def get_loc(message):
 
 ################################################################################################################
 
-#---------------------- command, /Penyelamat 
+#------------------command,  /Penyelamat ------------------- 
 
-@bot.message_handler(commands=["Penyelamat🔰"])
+@bot.message_handler(commands=["penyelamat"])
 def greet_message(message):
     markup = types.ReplyKeyboardMarkup(row_width=2)
     button_1 = types.KeyboardButton('/semak')
-    markup.row(button_1)
+    button_2 = types.KeyboardButton('/keperluan')
+    markup.row(button_1,button_2)
     bot.send_message(message.chat.id, """Jika anda seorang Penyelamat🔰, ikut langkah berikut:
-                                        \n1️⃣ Untuk mengetahui senarai negeri mangsa banjir, \ntekan butang ➡ [/semak]
-                                        \n2️⃣ Untuk mengetahui barang keperluan mangsa banjir, \ntekan butang ➡  [/keperluan]
-                                        \n3️⃣ Untuk mengesan lokasi mangsa banjir
+                                        \n1️⃣ Ketahui senarai negeri mangsa banjir, \ntekan butang ➡ [/semak]
+                                        \n2️⃣ Untuk menjejaki lokasi mangsa banjir, gunakan nama_negeri terpapar diatas 👆
                                         \n 👉 /negeri[jarak]/nama_negeri
+
+                                        \n3️⃣Untuk mengetahui barang keperluan mangsa banjir, \ntekan butang ➡  [/keperluan]
+                                        
                                         \n Contoh:
                                         \n 👉/negeri /Perak""", reply_markup=markup)
+### semak negeri terbabit dalam banjir
 @bot.message_handler(commands=["semak"])
 def get_negeri_list(message):
     mycursor.execute("SELECT Negeri from banjir_info")
@@ -254,7 +258,8 @@ def get_negeri_list(message):
     emp_set = emp_set.replace(",", "")
     emp_set = emp_set.replace("(", "▶ ")
     emp_set = emp_set.replace(")", "")
-    bot.reply_to(message, "Berikut senarai data nama negeri yang terdapat dalam database; {}".format((emp_set)))
+    bot.reply_to(message, "Penyelamat🔰 \nBerikut senarai data nama negeri yang terdapat dalam database; {}".format((emp_set)))
+
 ### semak barang keperluan mangsa 
 @bot.message_handler(commands=["keperluan"])
 def get_barang_from_db(message):
@@ -273,6 +278,7 @@ def get_barang_from_db(message):
     emp_set = emp_set.replace(")", "")
 
     bot.reply_to(message, "Penyelamat🔰 \nKala ini, berikut adalah senarai barang keperluan mangsa: \n\n{}".format(emp_set))
+
 @bot.message_handler(commands=["negeri"])
 def get_info(message):
     try:
@@ -286,11 +292,13 @@ def get_info(message):
         list_negeri = mycursor.fetchall()
 
         no_tuple_list_negeri = [list(data) for data in list_negeri]
+    
         flat_list = [y for data in no_tuple_list_negeri for y in data]
+        
 
         # check wether the Negeri is exist in the Database
         if negeri not in flat_list:
-            bot.reply_to(message, 'Tiada maklumat mangsa dalam negeri dinyatakan. Sila cuba nama negeri lain.')
+            bot.reply_to(message, '❌Ralat: Tiada maklumat mangsa dalam negeri dinyatakan. \nSila cuba nama negeri di dalam senarai semak.')
 
         elif negeri in flat_list:
             mycursor.execute("SELECT Lokasi, Koordinat, Bil_mangsa, Status FROM banjir_info WHERE Negeri = '{}'".format(negeri))
@@ -308,6 +316,7 @@ def get_info(message):
             balas = balas.replace(")", "")
 
             bot.reply_to(message, balas)
+            
 
     except Exception as e1:
         bot.send_message(message.chat.id, "⚠ Format Salah: Sila ikut format 👉\n\n/negeri[jarak]/nama_Negeri")
@@ -316,7 +325,6 @@ def get_info(message):
 @bot.message_handler(func=lambda message:True)
 def echo_all(message):
     bot.reply_to(message, "⚠ Input Salah: Sila masukkan input mengikut format yang ditetapkan.")
-
 
 print('bot start running')
 bot.infinity_polling()
