@@ -1,6 +1,7 @@
 import os
 import telebot
 from telebot import types
+from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 import mysql.connector 
 import time 
 
@@ -21,34 +22,132 @@ mycursor = mydb.cursor()
 @bot.message_handler(commands=['start', 'mula'])
 def salam(message):
     user = message.from_user
-
+  
     #button
     markup = types.ReplyKeyboardMarkup(row_width=0.5)
-    button_1 = types.KeyboardButton('/Mangsa🆘') 
-    button_2 = types.KeyboardButton('/Penyelamat🔰') 
+    button_1 = types.KeyboardButton('/mangsa') 
+    button_2 = types.KeyboardButton('/penyelamat') 
     markup.row(button_1,button_2)
 
-    bot.reply_to(message, "BOT BANJIR TLEAH DIAKTIFKAN 🚩")
+
+    bot.reply_to(message, "BOT BANJIR TELAH DIAKTIFKAN 🚩")
     time.sleep(2)
     bot.send_message(message.chat.id,
                  """🚨
-                \nKepada {}, jika anda terperangkap, tarik nafas dan bertenang. 
-                \nIkuti langkah dibawah sebaik mungkin.
-                \nAdakah anda seorang mangsa atau penyelamat?
-                \nJika mangsa, tekan ini 👉 [/Mangsa 🆘] \nJika penyelamat, tekan ini 👉 [/Penyelamat🔰]
-                \nSila pilih dengan menekan butang dibawah 👇
+                \nSebelum BOT BANJIR mula, sila pilih peranan anda. 
+                \nAdakah anda seorang 
+
+                \n▶ mangsa 
+                \natau 
+                \n▶ penyelamat?
+
+                \nJika mangsa, tekan ini 👉 [/mangsa ] \nJika penyelamat, tekan ini 👉 [/penyelamat]
+                \nSila pilih peranan dengan menekan butang dibawah 👇
                  
-                 """.format(user.first_name), reply_markup=markup)
+                 """.format(user.first_name), reply_markup=markup) #reply_markup=markup)
 
 # command, /Mangsa -- untuk mangsa banjir
-@bot.message_handler(commands=["Mangsa🆘"])
+
+@bot.message_handler(commands=["mangsa"])
 def set_loc(message):
     user = message.from_user
       
-    bot.send_message(message.chat.id, """Masukkan malumat {} dengan format berikut; 
-                                        \n /tolong[jarak]/Lokasi/ Negeri / Koordinat/ Bilangan mangsa 
+    bot.send_message(message.chat.id, """🚨
+                                        \nKepada {0},  tarik nafas dan bertenang.
+                                        \nMasukkan maklumat lokasi {0} dengan format berikut; 
+                                        \nlokasi/nama_lokasi
+                                        \n Contoh👇 \n/lokasi[jarak]/Ipoh
+
                                         \n🌟Pastikan anda meletakkan [jarak] dan "/" seperti format diatas.
-                                        \n Contoh👇\n/tolong /Ipoh/Perak/4.633028068476687, 101.08841026711355/5 orang""".format(user.first_name))
+                                        """.format(user.first_name))
+
+@bot.message_handler(commands=["lokasi"])
+def get_name(message):
+    user_chat_id = message.chat.id
+    user_text_lokasi = message.text.replace(" ", "")
+    user_text_lokasi = user_text_lokasi.split('/')
+
+    user_lokasi_info = user_text_lokasi[2]
+    val = (user_chat_id, user_lokasi_info)
+
+    mycursor.execute("INSERT INTO banjir_info (tele_chat_id, Lokasi) VALUES (%s,%s)", val)
+    mydb.commit()
+    bot.reply_to(message, '''🚨 RESPON 🚨
+                            \nMaklumat berjaya disimpan.✅ 
+                            \nSila masukkan negeri dengan format berikut:
+                            \nneg[jarak]/nama_lokasi
+                            \n Contoh👇 \n/neg /Perak
+                            
+                            \n🌟Pastikan anda meletakkan [jarak] dan "/" seperti format diatas.''')
+
+        
+
+@bot.message_handler(commands=["neg"])
+def get_name(message):
+    user_chat_id = message.chat.id
+    user_text_neg = message.text.replace(" ", "")
+    user_text_neg = user_text_neg.split('/')
+
+    user_neg_info =user_text_neg[2]
+    val = (user_neg_info,user_chat_id)
+    print(val)
+
+    mycursor.execute("UPDATE banjir_info SET Negeri = (%s) WHERE tele_chat_id = (%s)", val)
+    mydb.commit()
+    bot.reply_to(message, '''🚨 RESPON 🚨
+                            \nMaklumat berjaya disimpan.✅
+
+                            \nKemudian, sila hantar pin lokasi anda dari tempat kejadian. 
+                            \nCaranya:
+                            \n1-Tekan logo klip kertas di bahagian chat
+                            \n2-Pilih "location"
+                            \n3-Pin setepat-tepatnya pada lokasi anda
+                            \n4-Tekan "Send selected location"''')
+
+@bot.message_handler(content_types=["location"])     
+def accept_location(message):
+    user_chat_id = message.chat.id
+    bot.reply_to(message, "Lokasi telah berjaya diterima bot")
+    user_longitude = message.location.longitude
+    user_latitude = message.location.latitude
+    location_url = "https://www.google.com/maps/search/?api=1&query={0}%2C{1}".format(user_latitude,user_longitude)
+    print(location_url)
+    val = (location_url,user_chat_id)
+    mycursor.execute("UPDATE banjir_info SET Koordinat = (%s) WHERE tele_chat_id = (%s)", val)
+    mydb.commit()
+    bot.reply_to(message, '''🚨 RESPON 🚨
+                            \nPin lokasi berjaya disimpan.✅
+
+                            \nAkhir sekali, sila update jumlah mangsa di lokasi dengan format berikut
+                            \nbil_mangsa[jarak]/bilangan_mangsa
+                            \n Contoh👇 \n/bil_mangsa /5 orang''')
+
+@bot.message_handler(commands=["bil_mangsa"])
+def get_name(message):
+    user_chat_id = message.chat.id
+    user_text_bil_mangsa = message.text.replace(" ", "")
+    user_text_bil_mangsa = user_text_bil_mangsa.split('/')
+
+    user_bil_mangsa = user_text_bil_mangsa[2]
+
+    val = (user_bil_mangsa,user_chat_id)
+    mycursor.execute("UPDATE banjir_info SET Bil_mangsa = (%s) WHERE tele_chat_id = (%s)", val)
+    mydb.commit()
+    bot.reply_to(message, '''🚨 RESPON 🚨
+                            \nKesemua aklumat berjaya disimpan.✅
+                            \nHarap bersabar menunggu penyelamat datang. 🙏
+                            \nTerus kuat dan berdoa 🤲"''')
+    markup = types.ReplyKeyboardMarkup(row_width=2)
+    button_1 = types.KeyboardButton('/hidup')
+    button_2 = types.KeyboardButton('/tiada')
+    markup.row(button_1, button_2)
+    time.sleep(4)
+    bot.send_message(message.chat.id, """🚨 PERMINTAAN 🚨
+                                            \nUntuk meminta barang/makanan/powerbank/kit disebabkan kecemasan, 
+                                            \nTekan [/hidup] 👇
+
+                                            \nJika tiada permintaan,
+                                            \nTekan [/tiada] 👇""", reply_markup=markup)
 #### ----------------- input dari mangsa tempat kejadian---------------------
 
 
