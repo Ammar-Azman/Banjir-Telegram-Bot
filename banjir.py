@@ -164,15 +164,44 @@ def update_status_mangsa(message):
     mydb.commit()
 
     time.sleep(2)
-    bot.reply_to(message, "Kemaskini status berjaya.👍")         
+    bot.reply_to(message, "Kemaskini status berjaya.👍\nTerima kasih kerana terus kuat menghadapi musibah ini. \nSemoga Tuhan memberkati kita.🤲")               
+
 #---request barang keperluan
 @bot.message_handler(commands=["hidup"])
 def set_loc(message):
-    bot.send_message(message.chat.id, """Masukkan info dengan format berikut; 
+    bot.send_message(message.chat.id, """\n 🚨 INPUT 🚨
+                                        \nMasukkan info dengan format berikut; 
                                         \n 👉 /barang [jarak]/nama_Barang/ kuantiti/ keterangan_lain
-                                        \n 👉 Contoh: /barang /Powerbank/ 5 / Bateri habis""")
+                                        \n 🌟Pastikan anda meletakkan [jarak] dan "/" seperti format diatas.
+                                        \n 🌟Jika anda mempunyai lebih daripada satu permintaa, gunakan arahan /barang yang baru.
+                                        \n 👇 \nContoh: 
+                                        \n Barang 1️⃣: 
+                                        \n/barang /Powerbank/ 5 / Bateri habis ---> [Hantar]
+                                        \n Barang 2️⃣: 
+                                        \n/barang /Biskut/ 2 / Lapar ---> [Hantar]""")
+    user = message.from_user
+    #reminder 
+    
+
+#jika tiada barang
+@bot.message_handler(commands=["tiada"])
+def tiada_permintaan_barang(message):
+    bot.reply_to(message, "Baik, maklumat diterima. Buat masa sekarang, cuba sedaya upaya untuk berada di tempat tinggi atau selamat sebelum penyelamat sampai. 💪")
+    user = message.from_user
+    time.sleep(4)
+    markup = types.ReplyKeyboardMarkup()
+    button_selamat = types.KeyboardButton("/selamat")
+    markup.row(button_selamat)
+    for i in range(3):
+        bot.reply_to(message, """🚨 PERINGATAN 🚨 
+                                \nKepada {0}, jika anda TELAH DISELAMATKAN, sila tekan butang [/selamat]👇. 
+                                \nJika BELUM, ABAIKAN mesej ini sehingga anda diselamatkan.""".format(user.first_name), reply_markup = markup)
+        timing = 60*60
+        time.sleep(timing) # remind again after 1 hrs
+
 @bot.message_handler(commands=["barang"])
 def get_loc(message):
+    user = message.from_user
     user_text = message.text.split('/')
     barang = user_text[2]
     kuantiti = user_text[3]
@@ -181,7 +210,19 @@ def get_loc(message):
     val = [barang, kuantiti, catatan]
     mycursor.execute("INSERT INTO barang_info (Barang, Kuantiti, Catatan) VALUES (%s, %s, %s)", val)
     mydb.commit()
-    bot.reply_to(message, 'Maklumat berjaya disimpan. Penyelamat akan cuba sedaya upaya memenuhi keperluan anda. 🙏')      
+    time.sleep(7)
+    bot.reply_to(message, 'Maklumat berjaya disimpan. ✅ \nPenyelamat akan cuba sedaya upaya memenuhi keperluan anda. 🙏')  
+
+    time.sleep(4)
+    markup = types.ReplyKeyboardMarkup()
+    button_selamat = types.KeyboardButton("/selamat")
+    markup.row(button_selamat)
+    for i in range(3):
+        bot.reply_to(message, """🚨 PERINGATAN 🚨 
+                                \nKepada {0}, jika anda TELAH DISELAMATKAN, sila tekan butang [/selamat]👇. 
+                                \nJika BELUM, ABAIKAN mesej ini sehingga anda diselamatkan.""".format(user.first_name), reply_markup = markup)
+        timing = 60*60
+        time.sleep(timing) # remind again after 1 hrs    
 
 ################################################################################################################
 
