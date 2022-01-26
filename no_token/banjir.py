@@ -249,18 +249,21 @@ def greet_message(message):
 def get_negeri_list(message):
     mycursor.execute("SELECT Negeri from banjir_info")
     list_negeri = mycursor.fetchall()
-    convert_to_set_avoid_duplicate = set(list_negeri)
+
+    list_remove_tuple_in_list_negeri = [k for x in list_negeri for k in x]
+    my_dict = {i:list_remove_tuple_in_list_negeri.count(i) for i in list_remove_tuple_in_list_negeri}
+    
     emp_set = ""
-    for k in convert_to_set_avoid_duplicate:
-        emp_set = emp_set + str(k) + "\n"
-
-    emp_set = emp_set.replace("'", "")
-    emp_set = emp_set.replace(" ", "")
-    emp_set = emp_set.replace(",", "")
-    emp_set = emp_set.replace("(", "▶ ")
-    emp_set = emp_set.replace(")", "")
-    bot.reply_to(message, "Penyelamat🔰 \nBerikut senarai data nama negeri yang terdapat dalam database; {}".format((emp_set)))
-
+    for k in my_dict:
+        emp_set = emp_set + str(k) +  " ➡ " + str(my_dict[k]) + " laporan" +  "\n\n"
+    
+    bot.reply_to(message, """Penyelamat🔰 \nBerikut senarai data nama negeri yang terdapat dalam database: 
+                            \n{}
+                            \nUntuk menjejaki lokasi mangsa banjir, patuhi format dibawah. 
+                            \n /negeri[jarak]/nama_negeri
+                            \nnama_negeri menggunakan namaa negeri terpapar diatas 👆
+                            \n Contoh 👇
+                            \n/negeri /Perak""".format((emp_set)))
 ### semak barang keperluan mangsa 
 @bot.message_handler(commands=["keperluan"])
 def get_barang_from_db(message):
