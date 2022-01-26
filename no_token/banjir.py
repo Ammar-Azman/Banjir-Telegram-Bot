@@ -5,7 +5,8 @@ from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 import mysql.connector 
 import time 
 
-API_TOKEN = "5043764359:AAE8z5Vvl9qgzZPd8pbci4IXchAnpNqDTtc"
+
+API_TOKEN = ""
 bot = telebot.TeleBot(API_TOKEN)
 
 mydb = mysql.connector.connect(
