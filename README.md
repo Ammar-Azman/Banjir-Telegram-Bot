@@ -1,5 +1,5 @@
 # Banjir-Telegram-Bot
-A Telegram bot for flood victims living in a corrupted country that has no sense to protect its own citizen from disaster such flood from happen. 
+A Telegram that created to help the victims of flood in Malaysia by sending SOS information from the place they have been trapped.
 
 This Telegram bot have two types of roleplay.
 
