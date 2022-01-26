@@ -86,8 +86,8 @@ def get_name(message):
 @bot.message_handler(commands=["neg"])
 def get_name(message):
     user_chat_id = message.chat.id
-    user_text_neg = message.text.replace(" ", "")
-    user_text_neg = user_text_neg.split('/')
+    
+    user_text_neg = message.text.split('/')
 
     user_neg_info =user_text_neg[2]
     val = (user_neg_info,user_chat_id)
@@ -286,8 +286,8 @@ def get_barang_from_db(message):
 @bot.message_handler(commands=["negeri"])
 def get_info(message):
     try:
-        user_text = message.text.replace(" ", "")
-        user_text = user_text.split("/")
+        
+        user_text = message.text.split('/')
 
         negeri = user_text[2]
         bot.send_message(message.chat.id, "Carian sedang dilakukan...")
